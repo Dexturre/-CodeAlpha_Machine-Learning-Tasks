@@ -1,0 +1,92 @@
+# Emotion Recognition Configuration
+
+# Dataset configuration
+dataset:
+  name: "RAVDESS"  # Options: RAVDESS, TESS, EMO-DB, or custom
+  sampling_rate: 22050
+  max_duration: 4.0  # seconds
+  test_split: 0.2
+  val_split: 0.1
+  random_seed: 42
+
+# Audio preprocessing
+preprocessing:
+  normalize: true
+  remove_silence: true
+  silence_threshold: 0.01
+  resample: true
+  target_sr: 16000
+
+# Feature extraction
+features:
+  feature_type: "mfcc"  # Options: mfcc, melspectrogram, spectrogram, chroma
+  n_mfcc: 40
+  n_fft: 2048
+  hop_length: 512
+  n_mels: 128
+  fmin: 0
+  fmax: 8000
+  normalize_features: true
+
+# Data augmentation
+augmentation:
+  enabled: true
+  techniques:
+    - noise_addition
+    - pitch_shift
+    - time_stretch
+    - speed_change
+  noise_level: 0.005
+  pitch_shift_steps: [-2, -1, 1, 2]
+  time_stretch_factors: [0.9, 1.1]
+
+# Model architecture
+model:
+  type: "cnn"  # Options: cnn, lstm, cnn_lstm, transformer
+  input_shape: [40, 128]  # [n_mfcc, time_steps]
+  num_classes: 8  # Number of emotion classes
+
+# CNN specific parameters
+cnn:
+  filters: [32, 64, 128]
+  kernel_sizes: [3, 3, 3]
+  pool_sizes: [2, 2, 2]
+  dropout_rate: 0.3
+  dense_units: [128, 64]
+
+# LSTM specific parameters
+lstm:
+  units: [128, 64]
+  dropout_rate: 0.2
+  recurrent_dropout: 0.2
+  bidirectional: true
+
+# Training parameters
+training:
+  batch_size: 32
+  epochs: 100
+  learning_rate: 0.001
+  optimizer: "adam"
+  loss: "categorical_crossentropy"
+  metrics: ["accuracy"]
+  early_stopping_patience: 10
+  reduce_lr_patience: 5
+  checkpoint: true
+
+# Emotion labels mapping
+emotions:
+  0: "neutral"
+  1: "calm"
+  2: "happy"
+  3: "sad"
+  4: "angry"
+  5: "fearful"
+  6: "disgust"
+  7: "surprised"
+
+# Paths
+paths:
+  data_dir: "data/"
+  models_dir: "models/"
+  logs_dir: "logs/"
+  results_dir: "results/"
